@@ -20,15 +20,19 @@ function App() {
 		<div>
 			<Header title="Tseytin Transformer" repoUrl="https://github.com/lcarilla/tseytin-transformer"/>
 			<div className="p-4 space-y-4">
-				<div className="flex">
-					<div className="w-1/2">
+				<div className="flex flex-col md:flex-row">
+					<div className="w-full md:w-1/2 p-4">
 						<p>
 							This app will convert the Operations to the respective CNF sub-expressions so you don't have to go crazy doing it manually.
 						</p>
-						<p>It also provides the CNF expression in a DIMACS format (<a
-							href="https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html">https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html</a>)</p>
+						<p>
+							It also provides the CNF expression in a DIMACS format (
+							<a href="https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html">
+								https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html
+							</a>)
+						</p>
 					</div>
-					<div className="w-1/2 flex items-center justify-center">
+					<div className="w-full md:w-1/2 flex items-center justify-center p-4">
 						<img src="/gates_cnf.png" className="h-64" alt=""/>
 					</div>
 				</div>
