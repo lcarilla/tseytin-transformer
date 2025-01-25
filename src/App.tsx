@@ -26,14 +26,11 @@ function App() {
 							This app will convert the Operations to the respective CNF sub-expressions so you don't have to go crazy doing it manually.
 						</p>
 						<p>
-							It also provides the CNF expression in a DIMACS format (
-							<a href="https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html">
-								https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html
-							</a>)
+							It also provides the CNF expression in a <a href="https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html">DIMACS format</a>
 						</p>
 					</div>
 					<div className="w-full md:w-1/2 flex items-center justify-center p-4">
-						<img src="/gates_cnf.png" className="h-64" alt=""/>
+						<img src="/gates_cnf.png" className="max-h-64" alt=""/>
 					</div>
 				</div>
 				<ExpressionList
