@@ -11,7 +11,7 @@ pipeline {
 			steps {
 				withCredentials([usernamePassword(credentialsId: 'registry-auth', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
 					sh 'docker login localhost:8085 -u $USERNAME -p $PASSWORD'
-					sh 'docker push localhost:8085/luis-tseytin-transformer${imageTag}'
+					sh 'docker push localhost:8085/luis-tseytin-transformer:${imageTag}'
 				}
 			}
         }
