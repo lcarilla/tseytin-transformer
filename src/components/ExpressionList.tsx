@@ -26,7 +26,7 @@ const ExpressionList: React.FC<ExpressionListProps> = ({
 	return (
 		<div>
 			<Card className="p-4 mb-4">
-				<h2 className="text-xl font-bold mb-4">Create a New Expression</h2>
+				<h2 className="text-xl font-bold mb-4">Add Expression</h2>
 				<div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
 					<Input
 						placeholder="Value A"

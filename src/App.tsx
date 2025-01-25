@@ -1,9 +1,9 @@
 import ExpressionList from "@/components/ExpressionList.tsx";
-import { useState } from "react";
+import {useState} from "react";
 import {CNFClause, Expr, generateDIMACSFormat, transform} from "@/lib/logic.ts";
 import Header from "@/components/header.tsx";
-import { Card } from "@/components/ui/card.tsx";
-import { Button } from "@/components/ui/button.tsx";
+import {Card} from "@/components/ui/card.tsx";
+import {Button} from "@/components/ui/button.tsx";
 
 function App() {
 	const [expressions, setExpressions] = useState<Expr[]>([]);
@@ -18,8 +18,20 @@ function App() {
 
 	return (
 		<div>
-			<Header title="Tseytin Transformer" repoUrl="https://github.com/lcarilla/tseytin-transformer" />
+			<Header title="Tseytin Transformer" repoUrl="https://github.com/lcarilla/tseytin-transformer"/>
 			<div className="p-4 space-y-4">
+				<div className="flex">
+					<div className="w-1/2">
+						<p>
+							This app will convert the Operations to the respective CNF sub-expressions so you don't have to go crazy doing it manually.
+						</p>
+						<p>It also provides the CNF expression in a DIMACS format (<a
+							href="https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html">https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html</a>)</p>
+					</div>
+					<div className="w-1/2 flex items-center justify-center">
+						<img src="/gates_cnf.png" className="h-64" alt=""/>
+					</div>
+				</div>
 				<ExpressionList
 					expressions={expressions}
 					onExpressionsChange={setExpressions}
