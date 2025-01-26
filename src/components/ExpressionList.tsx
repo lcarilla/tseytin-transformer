@@ -3,7 +3,7 @@ import {Card, CardContent} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger} from "@/components/ui/select";
-import {Expr, ExprType} from "@/lib/logic.ts";
+import {Expr, ExprType, getSymbol} from "@/lib/logic.ts";
 
 type ExpressionListProps = {
 	onExpressionsChange: (expressions: Expr[]) => void;
@@ -75,12 +75,13 @@ const ExpressionList: React.FC<ExpressionListProps> = ({
 						{expressions.length > 0 ? (
 								expressions.map((expr, index) => (
 									<p key={index}>
-										{expr.type === ExprType.NOT ? `${expr.A} ↔ ¬${expr.C}` : `${expr.A} ↔ ${expr.B} ${expr.type} ${expr.C}`}
+										{expr.type === ExprType.NOT ? `${expr.A} ↔ ¬${expr.C}` : `${expr.A} ↔ ${expr.B} ${getSymbol(expr.type)} ${expr.C}`}
 									</p>
 								))
 						) : (
 							<p className="text-gray-500">No expressions available.</p>
 						)}
+						<p className="pt-5">Logical Symbols: ∧ (AND), ∨ (OR), ¬ (NOT), ⊕ (XOR), ↔ (XNOR, EXACTLY WHEN), ↓ (NOR), → (IMPLICATION)</p>
 					</CardContent>
 				</Card>
 

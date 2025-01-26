@@ -4,7 +4,29 @@ export enum ExprType {
 	OR = "OR",
 	NOT = "NOT",
 	NOR = "NOR",
-	XNOR = "XNOR"
+	XNOR = "XNOR",
+	IMPLICATION = "IMPLICATION"
+}
+
+export function getSymbol(exprType: ExprType): string {
+	switch (exprType) {
+		case ExprType.XOR:
+			return "⊕"; // Exclusive OR
+		case ExprType.AND:
+			return "∧"; // Logical AND
+		case ExprType.OR:
+			return "∨"; // Logical OR
+		case ExprType.NOT:
+			return "¬"; // Logical NOT
+		case ExprType.NOR:
+			return "↓"; // NOR (NOT OR)
+		case ExprType.XNOR:
+			return "↔"; // Logical equivalence (XNOR)
+		case ExprType.IMPLICATION:
+			return "→"; // Logical implication
+		default:
+			return ""; // Unknown type
+	}
 }
 
 export interface Expr {
@@ -74,6 +96,14 @@ export function transform(exprs: Expr[]): CNFClause[] {
 					{ literals: [{ variable: expr.B, negated: true }, { variable: expr.C, negated: true }, { variable: expr.A, negated: false }] },
 					{ literals: [{ variable: expr.B, negated: false }, { variable: expr.C, negated: true }, { variable: expr.A, negated: true }] },
 					{ literals: [{ variable: expr.B, negated: true }, { variable: expr.C, negated: false }, { variable: expr.A, negated: true }] }
+				);
+				break;
+			}
+			case ExprType.IMPLICATION: {
+				clauses.push(
+					{ literals: [{ variable: expr.A, negated: true }, { variable: expr.B, negated: true }, { variable: expr.C, negated: false }] },
+					{ literals: [{ variable: expr.B, negated: false }, { variable: expr.A, negated: false }] },
+					{ literals: [{ variable: expr.C, negated: true }, { variable: expr.A, negated: false }] }
 				);
 				break;
 			}
