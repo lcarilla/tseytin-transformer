@@ -29,7 +29,7 @@ const ExpressionList: React.FC<ExpressionListProps> = ({
 				<h2 className="text-xl font-bold mb-4">Add Expression</h2>
 				<div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
 					<Input
-						placeholder="Value A"
+						placeholder="Variable C"
 						value={newExpression.A}
 						onChange={(e) => handleChange("A", e.target.value)}
 					/>
@@ -37,7 +37,7 @@ const ExpressionList: React.FC<ExpressionListProps> = ({
 					<div className="flex">
 						<p className="pr-3">↔</p>
 					<Input
-						placeholder="Value B"
+						placeholder="Variable A"
 						value={newExpression.B}
 						onChange={(e) => handleChange("B", e.target.value)}
 					/></div>
@@ -58,7 +58,7 @@ const ExpressionList: React.FC<ExpressionListProps> = ({
 					</Select>
 
 					<Input
-						placeholder="Value C"
+						placeholder="Variable B"
 						value={newExpression.C}
 						onChange={(e) => handleChange("C", e.target.value)}
 					/>
