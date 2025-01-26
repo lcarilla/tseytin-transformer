@@ -55,8 +55,8 @@ export function transform(exprs: Expr[]): CNFClause[] {
 			}
 			case ExprType.NOT: {
 				clauses.push(
-					{ literals: [{ variable: expr.B, negated: false }, { variable: expr.A, negated: false }] },
-					{ literals: [{ variable: expr.B, negated: true }, { variable: expr.A, negated: true }] }
+					{ literals: [{ variable: expr.C, negated: false }, { variable: expr.A, negated: false }] },
+					{ literals: [{ variable: expr.C, negated: true }, { variable: expr.A, negated: true }] }
 				);
 				break;
 			}

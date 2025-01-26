@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
+import React, {useState} from "react";
+import {Card, CardContent} from "@/components/ui/card";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import {Select, SelectContent, SelectItem, SelectTrigger} from "@/components/ui/select";
 import {Expr, ExprType} from "@/lib/logic.ts";
 
 type ExpressionListProps = {
@@ -36,11 +36,12 @@ const ExpressionList: React.FC<ExpressionListProps> = ({
 
 					<div className="flex">
 						<p className="pr-3">↔</p>
-					<Input
-						placeholder="Variable A"
-						value={newExpression.B}
-						onChange={(e) => handleChange("B", e.target.value)}
-					/></div>
+						{newExpression.type != ExprType.NOT && <Input
+							placeholder="Variable A"
+							value={newExpression.B}
+							onChange={(e) => handleChange("B", e.target.value)}
+						/>}
+					</div>
 					<Select
 						value={newExpression.type}
 						onValueChange={(value) => handleChange("type", value)}
@@ -74,7 +75,7 @@ const ExpressionList: React.FC<ExpressionListProps> = ({
 						{expressions.length > 0 ? (
 								expressions.map((expr, index) => (
 									<p key={index}>
-										{expr.A} ↔ {expr.B} {expr.type} {expr.C}
+										{expr.type === ExprType.NOT ? `${expr.A} ↔ ¬${expr.C}` : `${expr.A} ↔ ${expr.B} ${expr.type} ${expr.C}`}
 									</p>
 								))
 						) : (
