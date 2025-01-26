@@ -4,16 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { Expr, ExprType, getSymbol } from "@/lib/logic.ts";
-import {Trash2} from "lucide-react";
+import {CopyIcon, Trash2} from "lucide-react";
 
 type ExpressionListProps = {
 	onExpressionsChange: (expressions: Expr[]) => void;
 	expressions: Expr[];
+	shareLink: string
 };
 
 const ExpressionList: React.FC<ExpressionListProps> = ({
 														   onExpressionsChange,
-														   expressions
+														   expressions,
+														   shareLink
 													   }) => {
 	const [newExpression, setNewExpression] = useState<Expr>({ A: "", type: ExprType.AND, B: "", C: "" });
 
@@ -29,6 +31,14 @@ const ExpressionList: React.FC<ExpressionListProps> = ({
 
 	const handleChange = (field: keyof Expr, value: string) => {
 		setNewExpression({ ...newExpression, [field]: value });
+	};
+
+	const handleCopyLink = () => {
+		navigator.clipboard.writeText(shareLink).then(() => {
+			alert("Share link copied to clipboard!");
+		}).catch((err) => {
+			console.error("Failed to copy link: ", err);
+		});
 	};
 
 	return (
@@ -85,7 +95,10 @@ const ExpressionList: React.FC<ExpressionListProps> = ({
 
 			<div>
 				<Card className="p-4 mb-2">
-					<h2 className="text-xl font-bold mb-4">Expressions:</h2>
+					<div className="flex justify-between items-center mt-4">
+						<h2 className="text-xl font-bold mb-4">Expressions:</h2>
+						<CopyIcon onClick={handleCopyLink}>Copy Share Link</CopyIcon>
+					</div>
 					<CardContent>
 						{expressions.length > 0 ? (
 							expressions.map((expr, index) => (

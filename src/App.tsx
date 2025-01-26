@@ -7,7 +7,22 @@ import {Button} from "@/components/ui/button.tsx";
 import {DPLLWrapper, Log} from "@/lib/dpll.ts";
 
 function App() {
-	const [expressions, setExpressions] = useState<Expr[]>([]);
+	const [expressions, setExpressions] = useState<Expr[]>(() => {
+		const urlParams = new URLSearchParams(window.location.search);
+		const shareLink = urlParams.get("expressions");
+
+		if (shareLink) {
+			try {
+				const parsedExpressions: Expr[] = JSON.parse(atob(shareLink));
+				if (Array.isArray(parsedExpressions)) {
+					return parsedExpressions;
+				}
+			} catch (error) {
+				return [];
+			}
+		}
+		return [];
+	});
 	const [cnfResults, setCnfResults] = useState<CNFClause[]>([]);
 	const [dimacsResults, setDimacsResults] = useState<string | undefined>(undefined);
 	const [dpllResults, setDpllResults] = useState<Log[]>([]);
@@ -15,6 +30,7 @@ function App() {
 	const [dpllDuration, setDpllDuration] = useState<number | undefined>(undefined);
 	const [dpllAssignments, setDpllAssignments] = useState<Record<string, boolean> | null>(null);
 	const [failFast, setFailFast] = useState<boolean>(false);
+	const [shareLink, setShareLink] = useState<string>("");
 
 	const stepsInSatisfiablePath = useMemo(() => {
 		const lastResult = dpllResults.at(-1);
@@ -25,6 +41,19 @@ function App() {
 		}
 		return prefixes;
 	}, [dpllSatisfiable, dpllResults]);
+
+	const handleExpressionsChange = (newExpressions: Expr[]) => {
+		setExpressions(newExpressions);
+
+		const newShareLink = btoa(JSON.stringify(newExpressions));
+		setShareLink(`https://${window.location.host}/?expressions=${newShareLink}`);
+		window.history.replaceState(
+			null,
+			"",
+			`${window.location.pathname}?expressions=${newShareLink}`
+		);
+	};
+
 
 	const handleGenerateCNF = () => {
 		const results = transform(expressions);
@@ -62,7 +91,8 @@ function App() {
 				</div>
 				<ExpressionList
 					expressions={expressions}
-					onExpressionsChange={setExpressions}
+					onExpressionsChange={handleExpressionsChange}
+					shareLink={shareLink}
 				/>
 				<Button
 					onClick={handleGenerateCNF}
