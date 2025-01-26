@@ -8,6 +8,22 @@ export enum ExprType {
 	IMPLICATION = "IMPLICATION"
 }
 
+export interface Expr {
+	A: string;
+	type: ExprType;
+	B: string;
+	C: string;
+}
+
+export interface CNFClause {
+	literals: CNFLiteral[]
+}
+
+export interface CNFLiteral {
+	negated: boolean
+	variable: string
+}
+
 export function getSymbol(exprType: ExprType): string {
 	switch (exprType) {
 		case ExprType.XOR:
@@ -27,22 +43,6 @@ export function getSymbol(exprType: ExprType): string {
 		default:
 			return ""; // Unknown type
 	}
-}
-
-export interface Expr {
-	A: string;
-	type: ExprType;
-	B: string;
-	C: string;
-}
-
-export interface CNFClause {
-	literals: CNFLiteral[]
-}
-
-export interface CNFLiteral {
-	negated: boolean
-	variable: string
 }
 
 export function transform(exprs: Expr[]): CNFClause[] {

@@ -81,7 +81,7 @@ const ExpressionList: React.FC<ExpressionListProps> = ({
 						) : (
 							<p className="text-gray-500">No expressions available.</p>
 						)}
-						<p className="pt-5">Logical Symbols: ∧ (AND), ∨ (OR), ¬ (NOT), ⊕ (XOR), ↔ (XNOR, EXACTLY WHEN), ↓ (NOR), → (IMPLICATION)</p>
+						<p className="pt-5">Logic Symbols: ∧ (AND), ∨ (OR), ¬ (NOT), ⊕ (XOR), ↔ (XNOR, EXACTLY WHEN), ↓ (NOR), → (IMPLICATION)</p>
 					</CardContent>
 				</Card>
 
