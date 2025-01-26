@@ -6,12 +6,15 @@ export interface RuleResult {
 }
 
 export interface Log {
-	clauses: CNFClause[],
-	log: string,
-	depth: string
+	clauses: CNFClause[];
+	log: string;
+	depth: string;
 }
-export function DPLLWrapper (input: CNFClause[]) {
+
+export function DPLLWrapper(input: CNFClause[], failFast: boolean) {
 	const logs: Log[] = [];
+	const variableAssignments: Record<string, boolean> = {};
+
 	function checkOLR(clauses: CNFClause[]): RuleResult | undefined {
 		for (const clause of clauses) {
 			if (clause.literals.length === 1) {
@@ -68,32 +71,58 @@ export function DPLLWrapper (input: CNFClause[]) {
 		return Array.from(literalsSet);
 	}
 
-	function DPLL(clauses: CNFClause[], currentDepth: string): boolean {
-		if(hasEmptyClauses(clauses)){
+	function DPLL(
+		clauses: CNFClause[],
+		currentDepth: string
+	): boolean {
+		if (hasEmptyClauses(clauses)) {
 			return false;
 		}
+
+		if (clauses.length === 0) {
+			return true;
+		}
+
 		const olrRes = checkOLR(clauses);
 		if (olrRes) {
+			variableAssignments[olrRes.variable] = olrRes.valueToBeSet;
 			const newClauses = applyAssignment(
 				clauses,
 				olrRes.variable,
 				olrRes.valueToBeSet
 			);
-			logs.push({log: `Applying OLR: ${olrRes.variable} = ${olrRes.valueToBeSet}`, clauses: [...newClauses], depth: currentDepth + "0"})
-			if(DPLL(newClauses, currentDepth + "0")){
+			logs.push({
+				log: `Applying OLR: ${olrRes.variable} = ${olrRes.valueToBeSet}`,
+				clauses: [...newClauses],
+				depth: currentDepth + '0',
+			});
+			const res = DPLL(newClauses, currentDepth + '0')
+
+			if(failFast) {
+				return res;
+			} else if(res){
 				return true;
 			}
 		}
 
 		const plrRes = checkPLR(clauses);
 		if (plrRes) {
+			variableAssignments[plrRes.variable] = plrRes.valueToBeSet;
 			const newClauses = applyAssignment(
 				clauses,
 				plrRes.variable,
 				plrRes.valueToBeSet
 			);
-			logs.push({log: `Applying PLR: ${plrRes.variable} = ${plrRes.valueToBeSet}`, clauses: [...newClauses], depth: currentDepth + "1"})
-			if(DPLL(newClauses, currentDepth + "1")){
+			logs.push({
+				log: `Applying PLR: ${plrRes.variable} = ${plrRes.valueToBeSet}`,
+				clauses: [...newClauses],
+				depth: currentDepth + '1',
+			});
+			const res = DPLL(newClauses, currentDepth + '1')
+
+			if(failFast) {
+				return res;
+			} else if(res){
 				return true;
 			}
 		}
@@ -106,27 +135,38 @@ export function DPLLWrapper (input: CNFClause[]) {
 		const smallestLiteral = remainingLiterals.sort()[0];
 
 		// Branch: Try setting the smallest literal to true
+		variableAssignments[smallestLiteral] = true;
 		const newClausesTrue = applyAssignment(clauses, smallestLiteral, true);
-		logs.push({log: `Setting Variable to true: ${smallestLiteral} = true`, clauses: [...newClausesTrue], depth: currentDepth + "2"})
-		const resultTrue = DPLL([...newClausesTrue],  currentDepth + "2");
+		logs.push({
+			log: `Setting Variable to true: ${smallestLiteral} = true`,
+			clauses: [...newClausesTrue],
+			depth: currentDepth + '2',
+		});
+		const resultTrue = DPLL([...newClausesTrue], currentDepth + '2');
 		if (resultTrue) {
 			return true;
 		}
 
-		// Branch: Try setting the smallest literal to false
+		// Backtrack and try false
+		variableAssignments[smallestLiteral] = false;
 		const newClausesFalse = applyAssignment(clauses, smallestLiteral, false);
-		logs.push({log: `Setting Variable to false: ${smallestLiteral} = false`, clauses: [...newClausesFalse], depth: currentDepth + "3"})
-
-		const resultFalse = DPLL([...newClausesFalse],  currentDepth + "3");
+		logs.push({
+			log: `Setting Variable to false: ${smallestLiteral} = false`,
+			clauses: [...newClausesFalse],
+			depth: currentDepth + '3',
+		});
+		const resultFalse = DPLL([...newClausesFalse], currentDepth + '3');
 		if (resultFalse) {
 			return true;
 		}
 
-		// If both branches fail, the formula is unsatisfiable
+		// Remove the assignment upon backtracking failure
+		delete variableAssignments[smallestLiteral];
+
 		return false;
 	}
 
-	function hasEmptyClauses(clauses: CNFClause[]): boolean{
+	function hasEmptyClauses(clauses: CNFClause[]): boolean {
 		return clauses.some(clause => clause.literals.length == 0);
 	}
 
@@ -158,10 +198,8 @@ export function DPLLWrapper (input: CNFClause[]) {
 				return !isClauseSatisfied;
 			});
 	}
+	logs.push({ log: 'DPLL start', clauses: [...input], depth: '0' });
+	const res = DPLL(input, '0');
 
-
-	logs.push({log: "DPLL start", clauses: [...input], depth: "0"})
-	const res = DPLL(input, "0");
-
-	return {logs, res};
+	return { logs, res, variableAssignments: res ? variableAssignments : null };
 }

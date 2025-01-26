@@ -5,7 +5,8 @@ export enum ExprType {
 	NOT = "NOT",
 	NOR = "NOR",
 	XNOR = "XNOR",
-	IMPLICATION = "IMPLICATION"
+	IMPLICATION = "IMPLICATION",
+	TRUE = "TRUE"
 }
 
 export interface Expr {
@@ -104,6 +105,12 @@ export function transform(exprs: Expr[]): CNFClause[] {
 					{ literals: [{ variable: expr.A, negated: true }, { variable: expr.B, negated: true }, { variable: expr.C, negated: false }] },
 					{ literals: [{ variable: expr.B, negated: false }, { variable: expr.A, negated: false }] },
 					{ literals: [{ variable: expr.C, negated: true }, { variable: expr.A, negated: false }] }
+				);
+				break;
+			}
+			case ExprType.TRUE: {
+				clauses.push(
+					{ literals: [{ variable: expr.A, negated: false }] },
 				);
 				break;
 			}
