@@ -81,8 +81,8 @@ function App() {
 							This app will convert the Operations to the respective CNF sub-expressions so you don't have to go crazy doing it manually.
 						</p>
 						<p>
-							It also provides the CNF expression in a <a href="https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html">DIMACS format</a>
-							and can run the DPLL algorithm to find whether the resulting CNF expression is satisfiable
+							It also provides the CNF expression in a <a href="https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html">DIMACS format</a> and
+							can run the DPLL algorithm to find whether the resulting CNF expression is satisfiable
 						</p>
 					</div>
 					<div className="w-full md:w-1/2 flex items-center justify-center p-4">
