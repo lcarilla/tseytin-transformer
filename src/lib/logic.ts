@@ -42,6 +42,8 @@ export function getSymbol(exprType: ExprType): string {
 			return "↔"; // Logical equivalence (XNOR)
 		case ExprType.IMPLICATION:
 			return "→"; // Logical implication
+		case ExprType.NAND:
+			return "⊼"; // NAND (NOT AND)
 		default:
 			return ""; // Unknown type
 	}
